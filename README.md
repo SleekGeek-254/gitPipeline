@@ -1,6 +1,4 @@
 # gitPipeline
-
-
 deploy your ASP.NET API to a remote IIS server using Git Actions:
 
 Step 1: Set up the remote IIS server
