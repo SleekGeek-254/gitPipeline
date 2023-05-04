@@ -1,0 +1,21 @@
+name: Deploy to IIS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run deployment script
+      uses: jexuscorp/iis-web-app-deploy@v1.0.0
+      with:
+        sourcePath: '.'
+        webAppName: 'gitPipeline'
+        iisWebSiteName: 'gitPipeline'
+        iisPhysicalPath: 'E:\testSite\gitPipeline\bin\Debug\net6.0\publish\wwwroot'
+        appPoolName: 'gitPipeline'
+        extraAppcmd: 'set config -section:system.webServer/security/authentication/anonymousAuthentication /enabled:true'
