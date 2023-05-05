@@ -9,7 +9,7 @@ on:
 
 env:
   PUBLISH_DIR: C:\actions-runner\_work\gitPipeline\gitPipeline\myapp
-  WEBSITE_DIR: E:\testSite\gitPipeline\bin\Debug\net6.0\publish\wwwroot
+  WEBSITE_DIR: E:\testSite\gitPipeline\bin\Debug\net6.0\publish
 
 
 jobs:
