@@ -1,21 +1,59 @@
-name: Deploy to IIS
+name: Build and deploy .NET Core app to IIS
+
 
 on:
   push:
     branches:
       - master
 
+
+env:
+  PUBLISH_DIR: ./myapp
+  WEBSITE_DIR: c:/ww/gh-actions-iis-demo.com
+
+
 jobs:
-  deploy:
-    runs-on: windows-latest
+  build-and-deploy:
+    runs-on: self-hosted
+    description: Build and deploy a .NET Core app to an IIS server
     steps:
-    - uses: actions/checkout@v2
-    - name: Run deployment script
-      uses: jexuscorp/iis-web-app-deploy@v1.0.0
-      with:
-        sourcePath: '.'
-        webAppName: 'gitPipeline'
-        iisWebSiteName: 'gitPipeline'
-        iisPhysicalPath: 'E:\testSite\gitPipeline\bin\Debug\net6.0\publish\wwwroot'
-        appPoolName: 'gitPipeline'
-        extraAppcmd: 'set config -section:system.webServer/security/authentication/anonymousAuthentication /enabled:true'
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+
+      # Setup .NET Core
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+
+      # Build with dotnet
+      - name: Build with dotnet
+        shell: cmd
+        run: dotnet build -c Release
+
+
+      # Publish with dotnet
+      - name: Publish with dotnet
+        shell: cmd
+        run: dotnet publish -c Release -o ${{ env.PUBLISH_DIR }}
+
+
+      # Stop IIS server
+      - name: Stop IIS server
+        shell: cmd
+        run: iisreset /stop
+
+
+      # Copy files to website directory
+      - name: Copy files to website directory
+        shell: cmd
+        run: xcopy /s /y ${{ env.PUBLISH_DIR }}\* ${{ env.WEBSITE_DIR }}
+
+
+      # Start IIS server
+      - name: Start IIS server
+        shell: cmd
+        run: iisreset /start
