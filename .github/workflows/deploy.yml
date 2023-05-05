@@ -15,7 +15,6 @@ env:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
-    description: Build and deploy a .NET Core app to an IIS server
     steps:
       # Checkout code
       - name: Checkout code
