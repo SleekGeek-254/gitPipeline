@@ -9,7 +9,7 @@ on:
 
 env:
   PUBLISH_DIR: ./myapp
-  WEBSITE_DIR: c:/ww/gh-actions-iis-demo.com
+  WEBSITE_DIR: c:/ww/gitPipelinePUB
 
 
 jobs:
