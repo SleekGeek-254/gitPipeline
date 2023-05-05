@@ -5,6 +5,7 @@ const containerStyle = {
   backgroundColor: '#F4F4F4',
   borderRadius: '5px',
   boxShadow: '0px 0px 5px 1px #C7C7C7',
+  marginTop:"25px"
 };
 
 const titleStyle = {
@@ -53,17 +54,17 @@ export class Home extends Component {
         <p>To help you get started,see the Dashboard for more info:</p>
         
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <div style={{width: '25%', backgroundColor: '#F8F8F8', padding: '20px'}}>
+          <div style={{width: '25%', backgroundColor: '#F8F8F8', borderRadius: '5px', padding: '20px'}}>
             <h2>Builds</h2>
             <p>Number of builds: --</p>
             <p>Success rate: --%</p>
           </div>
-          <div style={{width: '25%', backgroundColor: '#F8F8F8', padding: '20px'}}>
+          <div style={{width: '25%', backgroundColor: '#F8F8F8', borderRadius: '5px', padding: '20px'}}>
             <h2>Tests</h2>
             <p>Number of tests: --</p>
             <p>Success rate: --%</p>
           </div>
-          <div style={{width: '25%', backgroundColor: '#F8F8F8', padding: '20px'}}>
+          <div style={{width: '25%', backgroundColor: '#F8F8F8', borderRadius: '5px', padding: '20px'}}>
             <h2>Deployments</h2>
             <p>Number of deployments: --</p>
             <p>Success rate: --%</p>
