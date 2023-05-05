@@ -14,13 +14,24 @@ export class Home extends Component {
           <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
         </ul>
         <p>To help you get started, we have also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+      <div style={{width: '25%', backgroundColor: '#F8F8F8', padding: '20px'}}>
+        <h2>Builds</h2>
+        <p>Number of builds: 10</p>
+        <p>Success rate: 80%</p>
       </div>
+      <div style={{width: '25%', backgroundColor: '#F8F8F8', padding: '20px'}}>
+        <h2>Tests</h2>
+        <p>Number of tests: 20</p>
+        <p>Success rate: 90%</p>
+      </div>
+      <div style={{width: '25%', backgroundColor: '#F8F8F8', padding: '20px'}}>
+        <h2>Deployments</h2>
+        <p>Number of deployments: 5</p>
+        <p>Success rate: 100%</p>
+      </div>
+    </div>
+ </div>
     );
   }
 }
