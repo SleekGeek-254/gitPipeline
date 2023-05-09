@@ -16,6 +16,8 @@ env:
 jobs:
   build-and-deploy:
     runs-on: self-hosted
+    if: ${{ github.ref == 'refs/heads/dev' && github.event.pull_request.merged == true }}
+
     steps:
       # Checkout code
       - name: Checkout code
