@@ -5,7 +5,7 @@ on:
     types:
       - closed
     branches:
-      - main
+      - master
 
 env:
   PUBLISH_DIR: C:\actions-runner\_work\gitPipeline\gitPipeline\myapp
