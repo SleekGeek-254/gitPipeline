@@ -41,7 +41,7 @@ export class Home extends Component {
   render() {
     return (
       <div>
-        <h1>This is the change heading</h1>
+        <h1>gitPipeline</h1>
         <p>Welcome to your gitPipeline application, built with:</p>
         <ul>
           <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
@@ -49,6 +49,12 @@ export class Home extends Component {
           <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
         </ul>
 
+       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <div style={{width: '30%', backgroundColor: 'yellow', borderRadius: '5px', padding: '20px'}}>
+            <h2>Alert</h2>
+            <p>Maintaince will occur at -- EST</p>
+          </div>
+        </div>
 
 
         <p>To help you get started,see the Dashboard for more info:</p>
