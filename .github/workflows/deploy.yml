@@ -1,17 +1,14 @@
 name: Build and deploy .NET Core app to IIS
 
-
 on:
   push:
     branches:
       - master
 
-
 env:
   PUBLISH_DIR: C:\actions-runner\_work\gitPipeline\gitPipeline\myapp
   WEBSITE_DIR: E:\testSite\gitPipeline\bin\Debug\net6.0\publish
   IIS_SITE_NAME: gitPipeline
-
 
 jobs:
   build-and-deploy:
@@ -21,13 +18,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-
       # Setup .NET Core
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
-
 
       # Cache dependencies
       - name: Cache dependencies
@@ -37,32 +32,27 @@ jobs:
           key: ${{ runner.os }}-dotnet-${{ hashFiles('**/MyProject.csproj') }}
           restore-keys: ${{ runner.os }}-dotnet-
 
-
       # Build with dotnet
       - name: Build with dotnet
         shell: cmd
         run: dotnet build -c Release
-
 
       # Publish with dotnet
       - name: Publish with dotnet
         shell: cmd
         run: dotnet publish -c Release -o ${{ env.PUBLISH_DIR }}
 
-
       # Stop IIS site
       - name: Stop IIS site
         shell: cmd
-        run: appcmd stop site /site.name:"${{ env.IIS_SITE_NAME }}"
-
+        run: C:\Windows\System32\inetsrv\appcmd stop site /site.name:"${{ env.IIS_SITE_NAME }}"
 
       # Copy files to website directory
       - name: Copy files to website directory
         shell: cmd
         run: xcopy /s /y ${{ env.PUBLISH_DIR }}\* ${{ env.WEBSITE_DIR }}
 
-
       # Start IIS site
       - name: Start IIS site
         shell: cmd
-        run: appcmd start site /site.name:"${{ env.IIS_SITE_NAME }}"
+        run: C:\Windows\System32\inetsrv\appcmd start site /site.name:"${{ env.IIS_SITE_NAME }}"
