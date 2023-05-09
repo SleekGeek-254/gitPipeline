@@ -37,12 +37,12 @@ jobs:
           key: ${{ runner.os }}-dotnet-${{ hashFiles('**/MyProject.csproj') }}
           restore-keys: ${{ runner.os }}-dotnet-
 
-      # Stop IIS site [WEBSITE]
+      # Stop IIS site main WEBSITE
       - name: Stop IIS site
         shell: cmd
         run: C:\Windows\System32\inetsrv\appcmd stop site /site.name:"${{ env.IIS_SITE_NAME }}"
 
-      # Start IIS site [IIS_PAGEDOWN_NAME]
+      # Start IIS site Pagedown
       - name: Start IIS site
         shell: cmd
         run: C:\Windows\System32\inetsrv\appcmd start site /site.name:"${{ env.IIS_PAGEDOWN_NAME }}"
