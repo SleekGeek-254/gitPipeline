@@ -1,7 +1,7 @@
 name: Build and deploy .NET Core app to IIS
 
 on:
-  push:
+  issues:
     branches:
       - master
 
