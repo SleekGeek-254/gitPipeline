@@ -8,15 +8,18 @@ on:
       - master
 
 env:
-  PUBLISH_DIR: C:\actions-runner\_work\gitPipeline\gitPipeline\myapp
-  WEBSITE_DIR: E:\testSite\gitPipeline\bin\Debug\net6.0\publish
+  PUBLISH_DIR: 'C:\actions-runner\_work\gitPipeline\gitPipeline\myapp'
+  WEBSITE_DIR: 'E:\testSite\gitPipeline\bin\Debug\net6.0\publish'
   IIS_SITE_NAME: gitPipeline
   IIS_PAGEDOWN_NAME: pagedown
 
 jobs:
   build-and-deploy:
+    if: >
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'master' &&
+      github.event.pull_request.head.ref == 'dev'
     runs-on: self-hosted
-    if: ${{ github.ref == 'refs/heads/dev' && github.event.pull_request.merged }}
 
     steps:
       # Checkout code
