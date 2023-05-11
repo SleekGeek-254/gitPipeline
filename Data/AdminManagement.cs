@@ -10,7 +10,7 @@ namespace gitPipeline.Data
     {
         private readonly string connectionString = "Data Source=PHANTOM;Initial Catalog=adminDb;Integrated Security=True;";
 
-        private List<MaintenanceRequest> maintenanceRequests = new List<MaintenanceRequest>();
+        public List<MaintenanceRequest> MaintenanceRequests { get; private set; } = new List<MaintenanceRequest>();
 
         protected override void OnInitialized()
         {
@@ -18,11 +18,11 @@ namespace gitPipeline.Data
             CheckMaintenance();
         }
 
-        private void CheckMaintenance()
+        public void CheckMaintenance()
         {
             try
             {
-                maintenanceRequests.Clear();
+                MaintenanceRequests.Clear();
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -44,7 +44,7 @@ namespace gitPipeline.Data
                             Reason = reader["Reason"].ToString()
                         };
 
-                        maintenanceRequests.Add(maintenanceRequest);
+                        MaintenanceRequests.Add(maintenanceRequest);
                     }
                 }
 
@@ -56,7 +56,7 @@ namespace gitPipeline.Data
             }
         }
 
-        private void ScheduleMaintenance(MaintenanceRequest maintenanceRequest)
+        public void ScheduleMaintenance(MaintenanceRequest maintenanceRequest)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace gitPipeline.Data
             }
         }
 
-        private void CancelMaintenance(int maintenanceId)
+        public void CancelMaintenance(int maintenanceId)
         {
             try
             {
@@ -116,5 +116,4 @@ namespace gitPipeline.Data
         public int Duration { get; set; }
         public string Reason { get; set; }
     }
-
 }
