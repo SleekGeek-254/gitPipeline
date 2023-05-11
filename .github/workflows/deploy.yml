@@ -59,6 +59,11 @@ jobs:
       - name: Publish with dotnet
         shell: cmd
         run: dotnet publish -c Release -o ${{ env.PUBLISH_DIR }}
+
+      # Copy files to website directory
+      - name: Copy files to website directory
+        shell: cmd
+        run: xcopy /s /y /f ${{ env.PUBLISH_DIR }}\* ${{ env.WEBSITE_DIR }}
         
       # Stop IIS site [WEBSITE]
       - name: Stop IIS site
