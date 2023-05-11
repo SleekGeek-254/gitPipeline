@@ -45,6 +45,11 @@ jobs:
         shell: cmd
         run: C:\Windows\System32\inetsrv\appcmd stop site /site.name:"${{ env.IIS_SITE_NAME }}"
 
+      # Stop the w3wp.exe process
+      - name: Stop w3wp.exe process
+        shell: cmd
+        run: taskkill /F /IM w3wp.exe /T
+
       # Start IIS site Pagedown
       - name: Start IIS site
         shell: cmd
