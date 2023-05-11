@@ -17,7 +17,6 @@ namespace gitPipeline.Data
             base.OnInitialized();
             CheckMaintenance();
         }
-
         public void CheckMaintenance()
         {
             try
@@ -29,17 +28,14 @@ namespace gitPipeline.Data
                     connection.Open();
                     SqlCommand command = connection.CreateCommand();
 
-                    command.CommandText = "SELECT * FROM MaintenanceSchedule WHERE Date >= @StartDate AND Date <= @EndDate";
-                    command.Parameters.AddWithValue("@StartDate", DateTime.Now);
-                    command.Parameters.AddWithValue("@EndDate", DateTime.Now.AddDays(1));
-
+                    command.CommandText = "SELECT * FROM MaintenanceSchedule";
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
                         MaintenanceRequest maintenanceRequest = new MaintenanceRequest
                         {
                             Date = Convert.ToDateTime(reader["Date"]),
-                            Time = Convert.ToDateTime(reader["Time"]),
+                            Time = TimeOnly.Parse(reader["Time"].ToString()), // Convert to TimeOnly
                             Duration = Convert.ToInt32(reader["Duration"]),
                             Reason = reader["Reason"].ToString()
                         };
@@ -53,8 +49,11 @@ namespace gitPipeline.Data
             catch (Exception ex)
             {
                 // Handle the exception
+                Console.WriteLine("An error occurred while retrieving maintenance requests: " + ex.Message);
+                // You can display an error message to the user using a component property or by setting a flag
             }
         }
+
 
         public void ScheduleMaintenance(MaintenanceRequest maintenanceRequest)
         {
@@ -112,8 +111,12 @@ namespace gitPipeline.Data
         public int Id { get; set; } // Add the Id property
 
         public DateTime Date { get; set; }
-        public DateTime Time { get; set; }
+        public TimeOnly Time { get; set; } // Change the type to TimeOnly
         public int Duration { get; set; }
         public string Reason { get; set; }
     }
+
+
+
+
 }
