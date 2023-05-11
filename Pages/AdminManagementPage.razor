@@ -73,6 +73,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Date</th>
                     <th>Time</th>
                     <th>Duration</th>
@@ -80,20 +81,23 @@
                     <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach (var maintenanceRequest in AdminManagementComponent.MaintenanceRequests)
                 {
                     <tr>
+                        <td>@maintenanceRequest.MaintenanceScheduleId</td>
                         <td>@maintenanceRequest.Date</td>
                         <td>@maintenanceRequest.Time</td>
                         <td>@maintenanceRequest.Duration</td>
                         <td>@maintenanceRequest.Reason</td>
                         <td>
-                            <button @onclick="() => CancelMaintenance(maintenanceRequest.Id)">Cancel</button>
+                            <button @onclick="() => CancelMaintenance(maintenanceRequest.MaintenanceScheduleId)">Cancel</button>
                         </td>
                     </tr>
                 }
             </tbody>
+
         </table>
     }
     else

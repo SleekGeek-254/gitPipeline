@@ -8,7 +8,7 @@ namespace gitPipeline.Data
 {
     public partial class AdminManagement : ComponentBase
     {
-        private readonly string connectionString = "Data Source=PHANTOM;Initial Catalog=adminDb;Integrated Security=True;";
+        private readonly string connectionString = "Data Source=Phantom;Initial Catalog=adminDb;Integrated Security=True;";
 
         public List<MaintenanceRequest> MaintenanceRequests { get; private set; } = new List<MaintenanceRequest>();
 
@@ -34,6 +34,7 @@ namespace gitPipeline.Data
                     {
                         MaintenanceRequest maintenanceRequest = new MaintenanceRequest
                         {
+                            MaintenanceScheduleId = Convert.ToInt32(reader["MaintenanceScheduleId"]),
                             Date = Convert.ToDateTime(reader["Date"]),
                             Time = TimeOnly.Parse(reader["Time"].ToString()), // Convert to TimeOnly
                             Duration = Convert.ToInt32(reader["Duration"]),
@@ -49,11 +50,10 @@ namespace gitPipeline.Data
             catch (Exception ex)
             {
                 // Handle the exception
-                Console.WriteLine("An error occurred while retrieving maintenance requests: " + ex.Message);
+                //Console.WriteLine("An error occurred while retrieving maintenance requests: " + ex.Message);
                 // You can display an error message to the user using a component property or by setting a flag
             }
         }
-
 
         public void ScheduleMaintenance(MaintenanceRequest maintenanceRequest)
         {
@@ -66,7 +66,7 @@ namespace gitPipeline.Data
 
                     command.CommandText = "INSERT INTO MaintenanceSchedule (Date, Time, Duration, Reason) VALUES (@Date, @Time, @Duration, @Reason)";
                     command.Parameters.AddWithValue("@Date", maintenanceRequest.Date);
-                    command.Parameters.AddWithValue("@Time", maintenanceRequest.Time);
+                    command.Parameters.AddWithValue("@Time", maintenanceRequest.Time.ToString("HH:mm:ss")); // Convert TimeOnly to string
                     command.Parameters.AddWithValue("@Duration", maintenanceRequest.Duration);
                     command.Parameters.AddWithValue("@Reason", maintenanceRequest.Reason);
                     command.ExecuteNonQuery();
@@ -77,11 +77,13 @@ namespace gitPipeline.Data
             catch (Exception ex)
             {
                 // Handle the exception
+                Console.WriteLine("An error occurred while adding ScheduleMaintenance requests: " + ex.Message);
             }
         }
 
         public void CancelMaintenance(int maintenanceId)
         {
+           
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -102,16 +104,17 @@ namespace gitPipeline.Data
             catch (Exception ex)
             {
                 // Handle the exception
+                Console.WriteLine("An error occurred while  CancelMaintenance requests: " + ex.Message);
             }
         }
     }
 
     public class MaintenanceRequest
     {
-        public int Id { get; set; } // Add the Id property
+        public int MaintenanceScheduleId { get; set; } 
 
         public DateTime Date { get; set; }
-        public TimeOnly Time { get; set; } // Change the type to TimeOnly
+        public TimeOnly Time { get; set; }
         public int Duration { get; set; }
         public string Reason { get; set; }
     }
