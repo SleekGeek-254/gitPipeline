@@ -79,6 +79,14 @@
 </style>
 
 <div class="container">
+
+    @if (!string.IsNullOrEmpty(AdminManagementComponent.ErrorMessage))
+    {
+        <div class="color-danger">
+            @AdminManagementComponent.ErrorMessage
+        </div>
+    }
+
     <h3>Maintenance Requests</h3>
 
     @if (AdminManagementComponent.MaintenanceRequests.Count > 0)
