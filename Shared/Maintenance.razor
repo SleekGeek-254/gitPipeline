@@ -98,8 +98,9 @@
     {
         if (AdminManagementComponent.MaintenanceRequests.Count > 0)
         {
-            var maintenanceRequest = AdminManagementComponent.MaintenanceRequests[0];
-            var timeString = maintenanceRequest.Time.ToString("hh:mm tt");
+            var latestMaintenanceRequest = AdminManagementComponent.MaintenanceRequests.OrderByDescending(m => m.Date).FirstOrDefault();
+
+            var timeString = latestMaintenanceRequest.Time.ToString("hh:mm tt");
             var timezone = "EST"; // Replace with the actual timezone abbreviation
 
             return $"{timeString} - {timezone}";
@@ -107,4 +108,5 @@
 
         return "";
     }
+
 }
