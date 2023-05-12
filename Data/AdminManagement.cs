@@ -53,7 +53,7 @@ namespace gitPipeline.Data
             catch (Exception ex)
             {
                 // Handle the exception
-                ErrorMessage = "An error occurred while retrieving maintenance requests: " + ex.Message;
+                //ErrorMessage = "An error occurred while retrieving maintenance requests: " + ex.Message;
                 //Console.WriteLine("An error occurred while retrieving maintenance requests: " + ex.Message);
                 // You can display an error message to the user using a component property or by setting a flag
             }
@@ -81,8 +81,8 @@ namespace gitPipeline.Data
             catch (Exception ex)
             {
                 // Handle the exception
-                //ErrorMessage = "An error occurred while adding ScheduleMaintenance requests: " + ex.Message;
-                //Console.WriteLine("An error occurred while adding ScheduleMaintenance requests: " + ex.Message);
+                ErrorMessage = "An error occurred while adding ScheduleMaintenance requests: " + ex.Message;
+                Console.WriteLine("An error occurred while adding ScheduleMaintenance requests: " + ex.Message);
             }
         }
 
