@@ -1,5 +1,6 @@
 @using gitPipeline.Data
 @using Microsoft.AspNetCore.Components
+@inject IJSRuntime JSRuntime
 
 <style>
     .warning-alert {
@@ -20,7 +21,7 @@
     }
 </style>
 
-<div class="alert warning-alert mt-4">
+<div id="maintainacePopUP" class="alert warning-alert mt-4" style="@(IsMaintenanceDismissed ? "display: none;" : "")">
     <span class="icon-pencil me-2" aria-hidden="true"></span>
 
     <strong>@Title</strong>
@@ -36,7 +37,7 @@
             : No scheduled maintenance
         </span>
     }
-    <span class="dismiss-button" onclick="this.parentNode.style.display = 'none';">
+    <span class="dismiss-button" @onclick="DismissMaintenance">
         Dismiss
     </span>
 </div>
@@ -49,16 +50,48 @@
     public AdminManagement AdminManagementComponent { get; set; }
 
     private string MaintenanceTime { get; set; }
+    private bool IsMaintenanceDismissed { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMaintenanceRequests();
+        MaintenanceTime = GetMaintenanceTime();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IsMaintenanceDismissed = await IsMaintenanceDismissedFromStorage();
+            StateHasChanged();
+        }
+    }
 
     private async Task LoadMaintenanceRequests()
     {
         await AdminManagementComponent.CheckMaintenance();
     }
 
-    protected override async Task OnInitializedAsync()
+    private async Task<bool> IsMaintenanceDismissedFromStorage()
     {
-        await LoadMaintenanceRequests();
-        MaintenanceTime = GetMaintenanceTime();
+        // Use JavaScript interop to access sessionStorage
+        var result = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", "maintenanceDismissed");
+
+        if (result != null && bool.TryParse(result, out var dismissed))
+        {
+            return dismissed;
+        }
+
+        return false;
+    }
+
+
+    private async Task DismissMaintenance()
+    {
+        IsMaintenanceDismissed = true;
+
+        // Use JavaScript interop to store the dismissal flag in sessionStorage
+        await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "maintenanceDismissed", IsMaintenanceDismissed.ToString());
     }
 
     private string GetMaintenanceTime()
