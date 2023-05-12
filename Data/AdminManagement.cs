@@ -8,7 +8,7 @@ namespace gitPipeline.Data
 {
     public partial class AdminManagement : ComponentBase
     {
-        private readonly string connectionString = "Data Source=Phantom\\SQLEXPRESSPIPE;Initial Catalog=adminDb;Integrated Security=True;";
+        private readonly string connectionString = "Data Source=PHANTOM\SQLEXPRESSPIPE;Initial Catalog=adminDb;Integrated Security=True;";
 
         public List<MaintenanceRequest> MaintenanceRequests { get; private set; } = new List<MaintenanceRequest>();
 
