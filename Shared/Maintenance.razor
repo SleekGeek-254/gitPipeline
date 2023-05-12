@@ -1,0 +1,77 @@
+@using gitPipeline.Data
+@using Microsoft.AspNetCore.Components
+
+<style>
+    .warning-alert {
+        color: #000;
+        background-color: #f28b2b;
+        border-color: #ffeeba;
+        display: flex;
+        align-items: center;
+    }
+
+    .warning-alert .icon-pencil {
+        color: #856404;
+    }
+
+    .dismiss-button {
+        margin-left: auto;
+        cursor: pointer;
+    }
+</style>
+
+<div class="alert warning-alert mt-4">
+    <span class="icon-pencil me-2" aria-hidden="true"></span>
+
+    <strong>@Title</strong>
+    @if (!string.IsNullOrEmpty(MaintenanceTime))
+    {
+        <span class="text-nowrap">
+            : Downtime will be at @MaintenanceTime
+        </span>
+    }
+    else
+    {
+        <span class="text-nowrap">
+            : No scheduled maintenance
+        </span>
+    }
+    <span class="dismiss-button" onclick="this.parentNode.style.display = 'none';">
+        Dismiss
+    </span>
+</div>
+
+@code {
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Inject]
+    public AdminManagement AdminManagementComponent { get; set; }
+
+    private string MaintenanceTime { get; set; }
+
+    private async Task LoadMaintenanceRequests()
+    {
+        await AdminManagementComponent.CheckMaintenance();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMaintenanceRequests();
+        MaintenanceTime = GetMaintenanceTime();
+    }
+
+    private string GetMaintenanceTime()
+    {
+        if (AdminManagementComponent.MaintenanceRequests.Count > 0)
+        {
+            var maintenanceRequest = AdminManagementComponent.MaintenanceRequests[0];
+            var timeString = maintenanceRequest.Time.ToString("hh:mm tt");
+            var timezone = "EST"; // Replace with the actual timezone abbreviation
+
+            return $"{timeString} - {timezone}";
+        }
+
+        return "";
+    }
+}
