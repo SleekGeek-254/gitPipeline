@@ -2,6 +2,8 @@
 @using gitPipeline.Data
 @using Microsoft.AspNetCore.Components
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
 <style>
     .container {
         max-width: 80%;
@@ -51,17 +53,28 @@
         border: 1px solid #ccc;
     }
 
-    button {
+    .btn-submit {
         padding: 8px 12px;
-        background-color: #4CAF50;
+        background-color: green;
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
     }
 
-    button:hover {
+    .btn-del{
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-submit:hover {
         background-color: #45a049;
+    }
+
+    .color-danger{
+      color: red
     }
 </style>
 
@@ -92,7 +105,9 @@
                         <td>@maintenanceRequest.Duration</td>
                         <td>@maintenanceRequest.Reason</td>
                         <td>
-                            <button @onclick="() => CancelMaintenance(maintenanceRequest.MaintenanceScheduleId)">Cancel</button>
+                            <button class="btn-del" @onclick="() => CancelMaintenance(maintenanceRequest.MaintenanceScheduleId)">
+                                <i class="color-danger fas fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 }
@@ -128,7 +143,7 @@
             <textarea @bind="newMaintenanceRequest.Reason"></textarea>
         </div>
 
-        <button @onclick="ScheduleMaintenance">Schedule</button>
+        <button class="btn-submit" @onclick="ScheduleMaintenance">Schedule</button>
     </div>
 </div>
 
@@ -140,6 +155,7 @@
 
     protected override void OnInitialized()
     {
+        newMaintenanceRequest.Date = DateTime.Today;
         AdminManagementComponent.CheckMaintenance();
     }
 
