@@ -81,8 +81,8 @@ namespace gitPipeline.Data
             catch (Exception ex)
             {
                 // Handle the exception
-                ErrorMessage = "An error occurred while adding ScheduleMaintenance requests: " + ex.Message;
-                Console.WriteLine("An error occurred while adding ScheduleMaintenance requests: " + ex.Message);
+                //ErrorMessage = "An error occurred while adding ScheduleMaintenance requests: " + ex.Message;
+                //Console.WriteLine("An error occurred while adding ScheduleMaintenance requests: " + ex.Message);
             }
         }
 
