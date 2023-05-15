@@ -30,7 +30,7 @@ jobs:
           for /f "delims=" %%i in ('curl -s http://localhost:8081/maintenance') do set maintenance_time=%%i
           for /f "delims=" %%i in ('wmic os get localdatetime') do set current_time=%%i
           for /l %%j in (1,1,10) do (
-            if "%maintenance_time%" le "%current_time%" (
+            if "%maintenance_time%" <= "%current_time%" (
               break
             )
             timeout /t 1
