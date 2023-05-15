@@ -28,9 +28,9 @@ jobs:
         shell: cmd
         run: |
           for /f %%i in ('curl -s http://localhost:8081/maintenance') do set maintenance_time=%%i
-          for /f %%i in ('powershell -Command "Get-Date -Format yyyy-MM-dd HH:mm:ss"') do set current_time=%%i
+          for /f %%i in ('powershell -Command "Get-Date -Format 'yyyy-MM-dd HH:mm:ss'"') do set current_time=%%i
           if "%current_time%" LSS "%maintenance_time%" (
-            powershell -Command "$sleep_duration = [DateTime]::ParseExact('%maintenance_time%', 'yyyy-MM-dd HH:mm:ss', $null) - [DateTime]::ParseExact('%current_time%', 'yyyy-MM-dd HH:mm:ss', $null); Start-Sleep -Seconds $sleep_duration.TotalSeconds"
+            powershell -Command "$sleep_duration = [DateTime]::ParseExact('%maintenance_time%', 'yyyy-MM-dd HH:mm:ss', $null); Start-Sleep -Seconds $sleep_duration.TotalSeconds"
           )
           echo "Maintenance time reached."
 
