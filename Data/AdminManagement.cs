@@ -20,6 +20,43 @@ namespace gitPipeline.Data
             CheckMaintenance();
         }
 
+        public async Task<string> GetMaintenanceSchedule()
+        {
+            try
+            {
+                string maintenanceSchedule = string.Empty;
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    SqlCommand command = connection.CreateCommand();
+
+                    command.CommandText = "SELECT TOP 1 Date, Time FROM MaintenanceSchedule ORDER BY Date DESC";
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+
+                    if (reader.Read())
+                    {
+                        DateTime date = Convert.ToDateTime(reader["Date"]);
+                        TimeSpan time = TimeSpan.Parse(reader["Time"].ToString());
+                        DateTime maintenanceDateTime = date.Date + time;
+
+                        maintenanceSchedule = maintenanceDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                    }
+
+                    reader.Close();
+                }
+
+                return maintenanceSchedule;
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                // You can return an error message or throw an exception if needed
+                return string.Empty;
+            }
+        }
+
+
         public async Task CheckMaintenance()
         {
             try
