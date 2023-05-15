@@ -25,10 +25,14 @@ jobs:
       # Check if it is time to perform the maintenance
       - name: Check maintenance schedule
         run: |
-          maintenance_time=$(curl -s http://localhost:8081/maintenance)
-          if [ "$(date +%s)" -lt "$(date -d "$maintenance_time" +%s)" ]; then
-            sleep $(( $(date -d "$maintenance_time" +%s) - $(date +%s) ))
-          fi
+          $maintenance_time = Invoke-RestMethod -Uri 'http://localhost:8081/maintenance'
+          $current_time = [DateTime]::UtcNow
+          $maintenance_datetime = [DateTime]::ParseExact($maintenance_time, "yyyy-MM-dd HH:mm:ss", $null)
+          if ($current_time -lt $maintenance_datetime) {
+            $sleep_duration = $maintenance_datetime - $current_time
+            Start-Sleep -Seconds $sleep_duration.TotalSeconds
+          }
+
           
       # Checkout code
       - name: Checkout code
