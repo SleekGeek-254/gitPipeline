@@ -24,8 +24,6 @@ namespace gitPipeline.Data
         {
             try
             {
-                string maintenanceSchedule = string.Empty;
-
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
@@ -40,13 +38,12 @@ namespace gitPipeline.Data
                         TimeSpan time = TimeSpan.Parse(reader["Time"].ToString());
                         DateTime maintenanceDateTime = date.Date + time;
 
-                        maintenanceSchedule = maintenanceDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                        string maintenanceSchedule = maintenanceDateTime.ToString("yyyy-MM-dd HH:mm:ss");
+                        return maintenanceSchedule;
                     }
-
-                    reader.Close();
                 }
 
-                return maintenanceSchedule;
+                return string.Empty; // Return an empty string if no maintenance schedule is found
             }
             catch (Exception ex)
             {
