@@ -34,8 +34,8 @@ namespace gitPipeline.Data
 
                     if (reader.Read())
                     {
-                        DateTime date = Convert.ToDateTime(reader["Date"]);
-                        TimeSpan time = TimeSpan.Parse(reader["Time"].ToString());
+                        DateTime date = reader.GetDateTime(0); // Assuming Date column is the first column (index 0)
+                        TimeSpan time = reader.GetTimeSpan(1); // Assuming Time column is the second column (index 1)
                         DateTime maintenanceDateTime = date.Date + time;
 
                         string maintenanceSchedule = maintenanceDateTime.ToString("yyyy-MM-dd HH:mm:ss");
