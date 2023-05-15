@@ -25,14 +25,18 @@ jobs:
       # Check if it is time to perform the maintenance
       - name: Check maintenance schedule
         id: maintenance-check
+        shell: bash
         run: |
           maintenance_time=$(curl -s http://localhost:8081/maintenance)
           current_time=$(date -u +"%Y-%m-%d %H:%M:%S")
           if [[ "$current_time" < "$maintenance_time" ]]; then
-            sleep_duration=$(($(date -d "$maintenance_time" +%s) - $(date -d "$current_time" +%s)))
-            sleep "$sleep_duration"
+            sleep_duration=$(date -u -d "$maintenance_time" +%s)
+            current_timestamp=$(date -u +%s)
+            sleep_duration=$((sleep_duration - current_timestamp))
+            sleep $sleep_duration
           fi
           echo "Maintenance time reached."
+          
 
       # Checkout code
       - name: Checkout code
