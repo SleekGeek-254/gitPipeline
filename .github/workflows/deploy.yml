@@ -28,8 +28,10 @@ jobs:
         shell: cmd
         run: |
           for /f %%i in ('curl -s http://localhost:8081/maintenance') do set maintenance_time=%%i
-          for /f %%i in ('powershell -Command "(Get-Date).ToUniversalTime().ToString('yyyy-MM-dd HH:mm:ss')"') do set current_time=%%i
-          powershell -Command "$maintenance_datetime = Get-Date -Date '%maintenance_time%' -Format 'yyyy-MM-dd HH:mm:ss'; $current_datetime = Get-Date -Date '%current_time%' -Format 'yyyy-MM-dd HH:mm:ss'; if ($current_datetime -lt $maintenance_datetime) { $sleep_duration = [Math]::Ceiling(($maintenance_datetime - $current_datetime).TotalSeconds); Start-Sleep -Seconds $sleep_duration; }"
+          for /f %%i in ('powershell -Command "Get-Date -Format yyyy-MM-dd HH:mm:ss"') do set current_time=%%i
+          if "%current_time%" GTR "%maintenance_time%" (
+            powershell -Command "$sleep_duration = [DateTime]::ParseExact('%maintenance_time%', 'yyyy-MM-dd HH:mm:ss', $null) - [DateTime]::ParseExact('%current_time%', 'yyyy-MM-dd HH:mm:ss', $null); Start-Sleep -Seconds $sleep_duration.TotalSeconds"
+          )
           echo "Maintenance time reached."
 
       # Checkout code
