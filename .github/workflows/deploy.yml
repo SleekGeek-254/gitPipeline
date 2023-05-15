@@ -25,17 +25,16 @@ jobs:
       # Check if it is time to perform the maintenance
       - name: Check maintenance schedule
         id: maintenance-check
-        shell: bash
+        shell: pwsh
         run: |
-          maintenance_time=$(curl -s http://localhost:8081/maintenance)
-          current_time=$(date -u +"%Y-%m-%d %H:%M:%S")
-          if [[ "$current_time" < "$maintenance_time" ]]; then
-            sleep_duration=$(date -u -d "$maintenance_time" +%s)
-            current_timestamp=$(date -u +%s)
-            sleep_duration=$((sleep_duration - current_timestamp))
-            sleep $sleep_duration
-          fi
-          echo "Maintenance time reached."
+          $maintenance_time = Invoke-RestMethod -Uri 'http://localhost:8081/maintenance'
+          $current_time = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+          if ($current_time -lt $maintenance_time) {
+            $sleep_duration = [DateTime]::ParseExact($maintenance_time, 'yyyy-MM-dd HH:mm:ss', $null) - [DateTime]::UtcNow
+            Start-Sleep -Seconds $sleep_duration.TotalSeconds
+          }
+          Write-Host 'Maintenance time reached.'
+    
           
 
       # Checkout code
