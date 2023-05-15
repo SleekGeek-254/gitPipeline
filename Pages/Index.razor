@@ -1,9 +1,77 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Git Actions Workflow!</h1>
+Welcome to the Git Actions Workflow! This page provides an overview explanation of the AdminManagement Workflow.
 
-Welcome to your new app.
+<h2>AdminManagement Workflow Overview:</h2>
+<ol>
+    <li>Developers push changes to the Dev Repos</li>
+    <li>Reviewing changes on the Pull Request section</li>
+    <li>Admin reviews and approves pull requests</li>
+    <li>Scheduling maintenance downtime on the Application Admin schedule page</li>
+    <li>Broadcasting maintenance announcement to users</li>
+    <li>Merging and closing the pull request to activate the workflow</li>
+</ol>
+<p>
+    <strong>1. Developers push changes to the Dev Repos:</strong><br>
+    Developers working on the application make their code changes and push them to the Dev branch of the Github repository.
+    The Dev branch serves as a centralized location where all development changes are stored.
+</p>
+<p>
+    <strong>2. Reviewing changes on the Pull Request section:</strong><br>
+    After the developers push their changes, these changes can be viewed in the Pull Request section on the repository page.
+    Pull requests provide a way for developers to propose their changes and for other team members, such as the admin, to review them before merging into the main/master branch.
+</p>
+<p>
+    <strong>3. Admin reviews and approves pull requests:</strong><br>
+    The admin, who has the necessary permissions, reviews the changes made by the developers in the pull requests.
+    The admin ensures that the changes are appropriate, meet the required standards, and do not introduce any issues or conflicts with the existing codebase.
+    If the admin approves the changes, they proceed to the next step.
+</p>
+<p>
+    <strong>4. Scheduling maintenance downtime on the Application Admin schedule page:</strong><br>
+    Once the admin has reviewed and approved the changes, they schedule a maintenance downtime on the Application Admin schedule page.
+    This maintenance downtime is intended to notify the users that the application will be temporarily unavailable during a certain period.
+    The admin specifies the date and time for the maintenance window, ensuring it minimizes disruption to users.
+</p>
+<p>
+    <strong>5. Broadcasting maintenance announcement to users:</strong><br>
+    After scheduling the maintenance time, the admin uses the Admin schedule page to broadcast an announcement to the users.
+    The announcement notifies the users that the application will undergo maintenance at the specified time.
+    The purpose is to inform users in advance so they can plan accordingly and be aware of the temporary unavailability.
+</p>
+<p>
+    <strong>6. Merging and closing the pull request to activate the workflow:</strong><br>
+    After scheduling the maintenance and broadcasting the announcement, the admin returns to the pull request page.
+    The admin merges the approved changes from the Dev branch into the main/master branch.
+    Once the merge is complete, the admin closes the pull request, indicating that the changes have been successfully incorporated into the main codebase.
+    This closing action triggers the workflow to initiate the necessary steps to cause downtime and update the site.
+</p>
+<!-- Add additional styling here to match your desired design -->
 
 <Maintenance Title="Maintainance scheduled" />
+
+
+<style>
+    h1 {
+        color: #333;
+        font-size: 28px;
+        text-align: center;
+    }
+    h2 {
+        color: #555;
+        font-size: 24px;
+    }
+    p {
+        color: #777;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    ol {
+    color: #777;
+    font-size: 16px;
+    margin-left: 20px;
+}
+</style>
