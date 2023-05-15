@@ -22,14 +22,14 @@ jobs:
     runs-on: self-hosted
 
     steps:
-  # Check if it is time to perform the maintenance
+      # Check if it is time to perform the maintenance
       - name: Check maintenance schedule
         id: maintenance-check
-        shell: cmd
+        shell: pwsh
         run: |
-          for /f %%i in ('curl -s http://localhost:8081/maintenance') do set maintenance_time=%%i
-          for /f %%i in ('powershell -Command "Get-Date -Format 'yyyy-MM-dd HH:mm:ss'"') do set current_time=%%i
-          while ([DateTime]::ParseExact('%maintenance_time%', 'yyyy-MM-dd HH:mm:ss', $null) -le [DateTime]::ParseExact('%current_time%', 'yyyy-MM-dd HH:mm:ss', $null))
+          $maintenance_time = curl -s http://localhost:8081/maintenance
+          $current_time = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+          while ($maintenance_time -le $current_time)
           {
             Start-Sleep -Seconds 1
           }
