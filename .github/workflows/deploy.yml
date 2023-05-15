@@ -25,17 +25,15 @@ jobs:
       # Check if it is time to perform the maintenance
       - name: Check maintenance schedule
         run: |
-          $maintenanceTime = Invoke-WebRequest -Uri "http://localhost:8081/maintenance" -UseBasicParsing | Select-Object -ExpandProperty Content
-          $maintenanceDateTime = Get-Date $maintenanceTime -Format "yyyy-MM-dd HH:mm:ss"
+          $maintenanceTime = (Invoke-WebRequest -Uri "http://localhost:8081/maintenance" -UseBasicParsing).Content
+          $maintenanceDateTime = [DateTime]::ParseExact($maintenanceTime, "yyyy-MM-dd HH:mm:ss", $null)
           $currentTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
           
           if ($currentTime -lt $maintenanceDateTime) {
-            $sleepTime = New-TimeSpan -Start $currentTime -End $maintenanceDateTime
+            $sleepTime = $maintenanceDateTime - $currentTime
             Start-Sleep -Seconds $sleepTime.TotalSeconds
           }
-
-
-          
+            
       # Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
