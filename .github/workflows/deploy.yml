@@ -25,15 +25,14 @@ jobs:
       # Check if it is time to perform the maintenance
       - name: Check maintenance schedule
         id: maintenance-check
-        shell: cmd
         run: |
-          for /f %%i in ('curl -s http://localhost:8081/maintenance') do set maintenance_time=%%i
-          for /f %%i in ('powershell -Command "Get-Date -Format 'yyyy-MM-dd HH:mm:ss'"') do set current_time=%%i
-          if "%current_time%" LSS "%maintenance_time%" (
-            powershell -Command "$sleep_duration = [DateTime]::ParseExact('%maintenance_time%', 'yyyy-MM-dd HH:mm:ss', $null); Start-Sleep -Seconds $sleep_duration.TotalSeconds"
-          )
+          maintenance_time=$(curl -s http://localhost:8081/maintenance)
+          current_time=$(date -u +"%Y-%m-%d %H:%M:%S")
+          if [[ "$current_time" < "$maintenance_time" ]]; then
+            sleep_duration=$(($(date -d "$maintenance_time" +%s) - $(date -d "$current_time" +%s)))
+            sleep "$sleep_duration"
+          fi
           echo "Maintenance time reached."
-
 
       # Checkout code
       - name: Checkout code
