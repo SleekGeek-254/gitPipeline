@@ -27,14 +27,13 @@ jobs:
         id: maintenance-check
         shell: cmd
         run: |
-          for /f "delims=" %%i in ('curl -s http://localhost:8081/maintenance') do set maintenance_time=%%i
-          for /f "delims=" %%i in ('wmic os get localdatetime') do set current_time=%%i
-          for /l %%j in (1,1,10) do (
-            if "%maintenance_time%" <= "%current_time%" (
+          while read -r maintenance_time; do
+            current_time=$(wmic os get localdatetime)
+            if [[ "$maintenance_time" <= "$current_time" ]]; then
               break
-            )
+            fi
             timeout /t 1
-          )
+          done < <(curl -s http://localhost:8081/maintenance)
           echo "Maintenance time reached."
     
           
