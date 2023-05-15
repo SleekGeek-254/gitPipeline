@@ -26,6 +26,7 @@ jobs:
       - name: Check maintenance schedule
         run: |
           $maintenanceTime = (Invoke-WebRequest -Uri "http://localhost:8081/maintenance" -UseBasicParsing).Content
+          Write-Host "Maintenance Time: $maintenanceTime"
           $maintenanceDateTime = [DateTime]::ParseExact($maintenanceTime, "yyyy-MM-dd HH:mm:ss", $null)
           $currentTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
           
@@ -33,7 +34,8 @@ jobs:
             $sleepTime = $maintenanceDateTime - $currentTime
             Start-Sleep -Seconds $sleepTime.TotalSeconds
           }
-            
+
+
       # Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
