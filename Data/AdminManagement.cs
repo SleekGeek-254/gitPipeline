@@ -4,6 +4,11 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Components;
 
+using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+
 namespace gitPipeline.Data
 {
     public partial class AdminManagement : ComponentBase
@@ -13,6 +18,40 @@ namespace gitPipeline.Data
         public List<MaintenanceRequest> MaintenanceRequests { get; private set; } = new List<MaintenanceRequest>();
 
         public string ErrorMessage { get; private set; }
+
+
+        [HttpGet("/maintenance-time")]
+        public IActionResult GetMaintenanceTime()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    SqlCommand command = connection.CreateCommand();
+
+                    command.CommandText = "SELECT TOP 1 Time FROM MaintenanceSchedule ORDER BY Time DESC";
+                    object result = command.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        TimeSpan maintenanceTime = (TimeSpan)result;
+                        return new OkObjectResult(maintenanceTime.ToString("hh\\:mm\\:ss"));
+                    }
+                    else
+                    {
+                        return new NotFoundResult();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception
+                ErrorMessage = "An error occurred while retrieving the maintenance time: " + ex.Message;
+                Console.WriteLine("An error occurred while retrieving the maintenance time: " + ex.Message);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         protected override void OnInitialized()
         {
