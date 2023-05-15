@@ -22,6 +22,14 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # Check if it is time to perform the maintenance
+      - name: Check maintenance schedule
+        run: |
+          maintenance_time=$(curl -s http://localhost:8081/maintenance)
+          if [ "$(date +%s)" -lt "$(date -d "$maintenance_time" +%s)" ]; then
+            sleep $(( $(date -d "$maintenance_time" +%s) - $(date +%s) ))
+          fi
+          
       # Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
