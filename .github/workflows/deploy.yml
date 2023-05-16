@@ -25,18 +25,10 @@ jobs:
       # Check if it is time to perform the maintenance
       - name: Check maintenance schedule
         id: maintenance
+        shell: cmd
         run: |
-          maintenance_time=$(cmd /C curl -s https://localhost:7133/maintenance)
+          maintenance_time=$(curl -s https://localhost:7133/maintenance)
           echo "::set-output name=maintenance_time::$maintenance_time"
-
-      - name: Check if it's the right time for maintenance
-        run: |
-          current_time=$(date +"%Y-%m-%d %H:%M:%S")
-          if [[ "$current_time" == "${{ steps.maintenance.outputs.maintenance_time }}" ]]; then
-            echo "It is the right time for maintenance."
-          else
-            echo "It is not the right time for maintenance."
-          fi
 
       # Checkout code
       - name: Checkout code
