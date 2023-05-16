@@ -22,6 +22,22 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # Check if it is time to perform the maintenance
+      - name: Check maintenance schedule
+        id: maintenance
+        run: |
+          $maintenanceUrl = 'http://localhost:8081/maintenance'
+          $scheduledTime = (Invoke-RestMethod -Uri $maintenanceUrl).Trim()
+          $currentTime = Get-Date
+
+          if ($scheduledTime -ne $null -and $scheduledTime -gt $currentTime) {
+            $scheduledDateTime = [DateTime]::ParseExact($scheduledTime, 'yyyy-MM-dd HH:mm:ss', $null)
+            $timeDifference = $scheduledDateTime - $currentTime
+            Write-Host "Maintenance scheduled in $timeDifference"
+            Start-Sleep -Seconds $timeDifference.TotalSeconds
+          }
+
+
       # Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
