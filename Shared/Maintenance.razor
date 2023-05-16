@@ -94,19 +94,26 @@
         await JSRuntime.InvokeVoidAsync("sessionStorage.setItem", "maintenanceDismissed", IsMaintenanceDismissed.ToString());
     }
 
-    private string GetMaintenanceTime()
+private string GetMaintenanceTime()
+{
+    if (AdminManagementComponent.MaintenanceRequests.Count > 0)
     {
-        if (AdminManagementComponent.MaintenanceRequests.Count > 0)
-        {
-            var latestMaintenanceRequest = AdminManagementComponent.MaintenanceRequests.OrderByDescending(m => m.Date).FirstOrDefault();
+        var latestMaintenanceRequest = AdminManagementComponent.MaintenanceRequests.OrderByDescending(m => m.Date).FirstOrDefault();
 
+        var scheduleDateTime = latestMaintenanceRequest.Date.Date + latestMaintenanceRequest.Time.ToTimeSpan();
+        var currentTime = DateTime.Now;
+
+        if (scheduleDateTime > currentTime)
+        {
             var timeString = latestMaintenanceRequest.Time.ToString("hh:mm tt");
             var timezone = "EST"; // Replace with the actual timezone abbreviation
 
             return $"{timeString} - {timezone}";
         }
-
-        return "";
     }
+
+    return "";
+}
+
 
 }

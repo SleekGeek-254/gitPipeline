@@ -54,7 +54,6 @@ namespace gitPipeline.Data
             }
         }
 
-
         public async Task CheckMaintenance()
         {
             try
@@ -93,7 +92,6 @@ namespace gitPipeline.Data
                 // You can display an error message to the user using a component property or by setting a flag
             }
         }
-
 
         public void ScheduleMaintenance(MaintenanceRequest maintenanceRequest)
         {
@@ -160,8 +158,5 @@ namespace gitPipeline.Data
         public int Duration { get; set; }
         public string Reason { get; set; }
     }
-
-
-
 
 }
