@@ -29,20 +29,21 @@ namespace gitPipeline.Data
                     connection.Open();
                     SqlCommand command = connection.CreateCommand();
 
-                    command.CommandText = "SELECT * FROM MaintenanceSchedule";
+                    // Retrieve the latest maintenance schedule record
+                    command.CommandText = "SELECT TOP 1 * FROM MaintenanceSchedule ORDER BY Date DESC, Time DESC";
                     SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     string schedule = string.Empty;
-                    while (reader.Read())
+                    if (reader.Read())
                     {
                         DateTime date = Convert.ToDateTime(reader["Date"]).Date;
                         TimeSpan time = TimeSpan.Parse(reader["Time"].ToString());
                         DateTime scheduleDateTime = date + time;
 
-                        schedule += scheduleDateTime.ToString("yyyy-MM-dd HH:mm:ss") + Environment.NewLine;
+                        schedule = scheduleDateTime.ToString("yyyy-MM-dd HH:mm:ss");
                     }
 
-                    return schedule.Trim();
+                    return schedule;
                 }
             }
             catch (Exception ex)
@@ -52,6 +53,7 @@ namespace gitPipeline.Data
                 throw;
             }
         }
+
 
         public async Task CheckMaintenance()
         {
