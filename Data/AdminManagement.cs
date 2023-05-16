@@ -66,7 +66,7 @@ namespace gitPipeline.Data
                     connection.Open();
                     SqlCommand command = connection.CreateCommand();
 
-                    command.CommandText = "SELECT * FROM MaintenanceSchedule";
+                    command.CommandText = "SELECT * FROM MaintenanceSchedule ORDER BY Date DESC, Time DESC";
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
