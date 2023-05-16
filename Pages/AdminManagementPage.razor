@@ -107,8 +107,8 @@
                 {
                     <tr>
                         <td>@maintenanceRequest.MaintenanceScheduleId</td>
-                        <td>@maintenanceRequest.Date</td>
-                        <td>@maintenanceRequest.Time</td>
+                        <td>@maintenanceRequest.Date.ToShortDateString()</td>
+                        <td>@maintenanceRequest.Time.ToString()</td>
                         <td>@maintenanceRequest.Duration</td>
                         <td>@maintenanceRequest.Reason</td>
                         <td>
@@ -119,8 +119,8 @@
                     </tr>
                 }
             </tbody>
-
         </table>
+
     }
     else
     {

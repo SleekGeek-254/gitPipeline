@@ -25,13 +25,14 @@ jobs:
       # Check if it is time to perform the maintenance
       - name: Check maintenance schedule
         run: |
-          maintenance_time=$(curl -s http://localhost:8081/maintenance)
-          echo "Maintenance time: $maintenance_time"
+          maintenance_time=$(curl -s https://localhost:7133/maintenance)
           current_time=$(date +%s)
-          maintenance_time_unix=$(date -d "$maintenance_time" +%s)
-          if [ $current_time -lt $maintenance_time_unix ]; then
-            sleep $((maintenance_time_unix - current_time))
+          schedule_time=$(date -d "$maintenance_time" +%s)
+          sleep_duration=$((schedule_time - current_time))
+          if [ $sleep_duration -gt 0 ]; then
+            sleep $sleep_duration
           fi
+
       # Checkout code
       - name: Checkout code
         uses: actions/checkout@v2

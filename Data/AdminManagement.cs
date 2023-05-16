@@ -8,7 +8,7 @@ namespace gitPipeline.Data
 {
     public partial class AdminManagement : ComponentBase
     {
-        private readonly string connectionString = "Data Source=PHANTOM\\SQLEXPRESSPIPE;Initial Catalog=adminDb;Integrated Security=True;";
+        private readonly string connectionString = "Data Source=CHIWO\\SQLEXPRESS;Initial Catalog=adminDb;Integrated Security=True;";
 
         public List<MaintenanceRequest> MaintenanceRequests { get; private set; } = new List<MaintenanceRequest>();
 
@@ -29,30 +29,29 @@ namespace gitPipeline.Data
                     connection.Open();
                     SqlCommand command = connection.CreateCommand();
 
-                    command.CommandText = "SELECT TOP 1 Date, Time FROM MaintenanceSchedule ORDER BY Date DESC";
+                    command.CommandText = "SELECT * FROM MaintenanceSchedule";
                     SqlDataReader reader = await command.ExecuteReaderAsync();
 
-                    if (reader.Read())
+                    string schedule = string.Empty;
+                    while (reader.Read())
                     {
-                        DateTime date = reader.GetDateTime(0); // Assuming Date column is the first column (index 0)
-                        TimeSpan time = reader.GetTimeSpan(1); // Assuming Time column is the second column (index 1)
-                        DateTime maintenanceDateTime = date.Date + time;
+                        DateTime date = Convert.ToDateTime(reader["Date"]).Date;
+                        TimeSpan time = TimeSpan.Parse(reader["Time"].ToString());
+                        DateTime scheduleDateTime = date + time;
 
-                        string maintenanceSchedule = maintenanceDateTime.ToString("yyyy-MM-dd HH:mm:ss");
-                        return maintenanceSchedule;
+                        schedule += scheduleDateTime.ToString("yyyy-MM-dd HH:mm:ss") + Environment.NewLine;
                     }
-                }
 
-                return string.Empty; // Return an empty string if no maintenance schedule is found
+                    return schedule.Trim();
+                }
             }
             catch (Exception ex)
             {
                 // Handle the exception
-                // You can return an error message or throw an exception if needed
-                return string.Empty;
+                // You can log the exception or throw it for further handling
+                throw;
             }
         }
-
 
         public async Task CheckMaintenance()
         {
@@ -72,7 +71,7 @@ namespace gitPipeline.Data
                         MaintenanceRequest maintenanceRequest = new MaintenanceRequest
                         {
                             MaintenanceScheduleId = Convert.ToInt32(reader["MaintenanceScheduleId"]),
-                            Date = Convert.ToDateTime(reader["Date"]),
+                            Date = Convert.ToDateTime(reader["Date"]).Date, // Convert to Date
                             Time = TimeOnly.Parse(reader["Time"].ToString()), // Convert to TimeOnly
                             Duration = Convert.ToInt32(reader["Duration"]),
                             Reason = reader["Reason"].ToString()
@@ -92,6 +91,7 @@ namespace gitPipeline.Data
                 // You can display an error message to the user using a component property or by setting a flag
             }
         }
+
 
         public void ScheduleMaintenance(MaintenanceRequest maintenanceRequest)
         {
