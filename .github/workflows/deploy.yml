@@ -27,8 +27,15 @@ jobs:
         id: maintenance
         shell: cmd
         run: |
-          maintenance_time=$(curl -s https://localhost:7133/maintenance)
-          echo "::set-output name=maintenance_time::$maintenance_time"
+          $maintenanceUrl = 'http://localhost:8089/maintenance'
+          $scheduledTime = (Invoke-RestMethod -Uri $maintenanceUrl).Trim()
+          $currentTime = Get-Date
+          
+          if ($scheduledTime -ne $null -and $scheduledTime -gt $currentTime) {
+            $timeDifference = $scheduledTime - $currentTime
+            Write-Host "Maintenance scheduled in $timeDifference"
+            Start-Sleep -Seconds $timeDifference.TotalSeconds
+          }
 
       # Checkout code
       - name: Checkout code
