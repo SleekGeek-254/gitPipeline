@@ -25,7 +25,7 @@ jobs:
       # Check if it is time to perform the maintenances
       - name: Check maintenance schedule
         run: |
-          $maintenance_time = (Invoke-WebRequest -Uri 'https://localhost:7133/maintenance').Content
+          $maintenance_time = (Invoke-WebRequest -Uri 'https://localhost:7133/maintenance' -SkipCertificateCheck).Content
           $current_time = [Math]::Round((New-TimeSpan -Start (Get-Date -Year 1970 -Month 1 -Day 1 -Hour 0 -Minute 0 -Second 0 -Millisecond 0) -End (Get-Date)).TotalSeconds)
           $schedule_time = [Math]::Round((Get-Date -Date $maintenance_time).ToUniversalTime().Subtract((Get-Date -Year 1970 -Month 1 -Day 1 -Hour 0 -Minute 0 -Second 0 -Millisecond 0)).TotalSeconds)
           $sleep_duration = $schedule_time - $current_time
