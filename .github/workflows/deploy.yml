@@ -22,7 +22,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # Check if it is time to perform the maintenance
+      # Check if it is time to perform the maintenances
       - name: Check maintenance schedule
         run: |
           maintenance_time=$(curl -s https://localhost:7133/maintenance)
