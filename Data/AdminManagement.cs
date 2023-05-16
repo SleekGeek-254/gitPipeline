@@ -8,7 +8,7 @@ namespace gitPipeline.Data
 {
     public partial class AdminManagement : ComponentBase
     {
-        private readonly string connectionString = "Data Source=CHIWO\\SQLEXPRESS;Initial Catalog=adminDb;Integrated Security=True;";
+        private readonly string connectionString = "Data Source=PHANTOM\\SQLEXPRESSPIPE;Initial Catalog=adminDb;Integrated Security=True;";
 
         public List<MaintenanceRequest> MaintenanceRequests { get; private set; } = new List<MaintenanceRequest>();
 
@@ -29,20 +29,21 @@ namespace gitPipeline.Data
                     connection.Open();
                     SqlCommand command = connection.CreateCommand();
 
-                    command.CommandText = "SELECT * FROM MaintenanceSchedule";
+                    // Retrieve the latest maintenance schedule record
+                    command.CommandText = "SELECT TOP 1 * FROM MaintenanceSchedule ORDER BY Date DESC, Time DESC";
                     SqlDataReader reader = await command.ExecuteReaderAsync();
 
                     string schedule = string.Empty;
-                    while (reader.Read())
+                    if (reader.Read())
                     {
                         DateTime date = Convert.ToDateTime(reader["Date"]).Date;
                         TimeSpan time = TimeSpan.Parse(reader["Time"].ToString());
                         DateTime scheduleDateTime = date + time;
 
-                        schedule += scheduleDateTime.ToString("yyyy-MM-dd HH:mm:ss") + Environment.NewLine;
+                        schedule = scheduleDateTime.ToString("yyyy-MM-dd HH:mm:ss");
                     }
 
-                    return schedule.Trim();
+                    return schedule;
                 }
             }
             catch (Exception ex)
@@ -64,7 +65,7 @@ namespace gitPipeline.Data
                     connection.Open();
                     SqlCommand command = connection.CreateCommand();
 
-                    command.CommandText = "SELECT * FROM MaintenanceSchedule";
+                    command.CommandText = "SELECT * FROM MaintenanceSchedule ORDER BY Date DESC, Time DESC";
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
@@ -91,7 +92,6 @@ namespace gitPipeline.Data
                 // You can display an error message to the user using a component property or by setting a flag
             }
         }
-
 
         public void ScheduleMaintenance(MaintenanceRequest maintenanceRequest)
         {
@@ -158,8 +158,5 @@ namespace gitPipeline.Data
         public int Duration { get; set; }
         public string Reason { get; set; }
     }
-
-
-
 
 }

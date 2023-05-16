@@ -26,7 +26,7 @@ jobs:
       - name: Check maintenance schedule
         id: maintenance
         run: |
-          $maintenanceUrl = 'http://localhost:8089/maintenance'
+          $maintenanceUrl = 'http://localhost:8081/maintenance'
           $scheduledTime = (Invoke-RestMethod -Uri $maintenanceUrl).Trim()
           $currentTime = Get-Date
 
