@@ -25,7 +25,6 @@ jobs:
       # Check if it is time to perform the maintenance
       - name: Check maintenance schedule
         id: maintenance
-        shell: cmd
         run: |
           $maintenanceUrl = 'http://localhost:8089/maintenance'
           $scheduledTime = (Invoke-RestMethod -Uri $maintenanceUrl).Trim()
