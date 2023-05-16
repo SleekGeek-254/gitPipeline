@@ -26,7 +26,7 @@ jobs:
       - name: Check maintenance schedule
         id: maintenance
         run: |
-          maintenance_time=$(curl -s https://localhost:7133/maintenance)
+          maintenance_time=$(cmd /C curl -s https://localhost:7133/maintenance)
           echo "::set-output name=maintenance_time::$maintenance_time"
 
       - name: Check if it's the right time for maintenance
